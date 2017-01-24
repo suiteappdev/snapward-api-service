@@ -2,7 +2,6 @@ var mongoose = require("mongoose");
 var crypto = require("crypto");
 var userSchema = require('./user');
 var sessionSchema = require('./session');
-var config = require('./config');
 
 var user = {
 	sessionSchema : sessionSchema,
