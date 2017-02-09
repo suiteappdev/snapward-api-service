@@ -13,8 +13,7 @@ module.exports = function(app, apiRoutes, io){
        Model
        .find({_company : mongoose.Types.ObjectId(req.headers["x-shoply-company"])})
        .populate("_company")
-       .populate("_seller")
-       .populate("_client")
+       .populate("_user")
        .exec(function(err, rs){
            if(!err)
            {
@@ -51,8 +50,6 @@ module.exports = function(app, apiRoutes, io){
        });
     }
 
-
-
     function getById(req, res){
 
       var REQ = req.params; 
@@ -60,9 +57,7 @@ module.exports = function(app, apiRoutes, io){
        Model
        .findOne({_id : REQ.id})
        .populate("_user")
-       .populate("_seller")
        .populate("_company")
-       .populate("_client")
        .exec(function(err, rs){
            if(!err)
            {
@@ -74,20 +69,13 @@ module.exports = function(app, apiRoutes, io){
     }
 
     function post(req, res){
-
   		var data = {};
   		var REQ = req.body || req.params;
 
       !REQ.data || (data.data = REQ.data);
-
-      data.metadata = REQ.metadata;
-      data.shoppingCart = REQ.shoppingCart;      
-      data._seller = mongoose.Types.ObjectId(REQ._seller);
-      data._client = mongoose.Types.ObjectId(REQ._client);
       data._company = mongoose.Types.ObjectId(req.headers["x-shoply-company"]);
             
   	 var model = new Model(data);
-
   		model.save(function(err, rs){
   			if(rs){
   				  res.json(rs);
@@ -106,9 +94,7 @@ module.exports = function(app, apiRoutes, io){
   		!REQ.data || (data.data = REQ.data);
       !REQ.metadata || (data.metadata = REQ.metadata);           
 
-      data._seller =  mongoose.Types.ObjectId(REQ._seller);
-      data._client =  mongoose.Types.ObjectId(REQ._client);
-  		
+      data._user =  mongoose.Types.ObjectId(REQ._user);
       data = { $set : data };          
 
   		Model.update({ _id : mongoose.Types.ObjectId(req.params.id) },  data,function(err, rs){
@@ -135,9 +121,7 @@ module.exports = function(app, apiRoutes, io){
        Model
        .find({_seller : mongoose.Types.ObjectId(REQ.user) , _company : mongoose.Types.ObjectId(req.headers["x-shoply-company"])})
        .populate("_user")
-       .populate("_seller")
        .populate("_company")
-       .populate("_client")
        .exec(function(err, rs){
            if(!err)
            {
@@ -148,7 +132,7 @@ module.exports = function(app, apiRoutes, io){
        });
   }
 
-  function facturado(req, res){
+  function atendido(req, res){
       Model.update({ _id : mongoose.Types.ObjectId(req.params.id), _company : mongoose.Types.ObjectId(req.headers["x-shoply-company"])}, {"data.estado" : 'Facturado'}, function(err, rs){
         if(!err){
           res.status(200).json(rs);
@@ -162,7 +146,7 @@ module.exports = function(app, apiRoutes, io){
     apiRoutes.get("/" + _url_alias + "/user/:user", getByUser);
     apiRoutes.post("/" + _url_alias, post);
     apiRoutes.put("/" + _url_alias + "/:id", update);
-    apiRoutes.put("/" + _url_alias + "/:id/facturado", facturado);
+    apiRoutes.put("/" + _url_alias + "/:id/atendido", atendido);
     apiRoutes.delete("/" + _url_alias + "/:id", remove);
 
     return this;
