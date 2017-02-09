@@ -56,14 +56,13 @@ module.exports = function(app, apiRoutes){
                     });  
 
               }else if(usuario.type == "SELLER"){
-                    User.findOne({email : usuario.email}).populate("_company").exec(function(err, rs){
+                    User.findOne({email : usuario.email}).exec(function(err, rs){
                         if(!err){
                             _html = _compiler.render({_data : {
                               name : usuario.name,
                               last_name : usuario.last_name,
                               email : usuario.email,
-                              password : _plainPwd,
-                              company : rs._company.data.empresa
+                              password : _plainPwd
                             }},'seller/index.ejs');
 
                             mailOptions.html = _html;
@@ -84,14 +83,13 @@ module.exports = function(app, apiRoutes){
                           }
                     });
               }else if(usuario.type == "EMPLOYE"){
-                    User.findOne({email : usuario.email}).populate("_company").exec(function(err, rs){
+                    User.findOne({email : usuario.email}).exec(function(err, rs){
                         if(!err){
                             _html = _compiler.render({_data : {
                               name : usuario.name,
                               last_name : usuario.last_name,
                               email : usuario.email,
-                              password : _plainPwd,
-                              company : rs._company.data.empresa
+                              password : _plainPwd
                             }},'employe/index.ejs');
 
                             mailOptions.html = _html;
@@ -224,7 +222,7 @@ module.exports = function(app, apiRoutes){
     }
 
     function users(req, res){
-        User.find({_company : mongoose.Types.ObjectId(req.headers["x-shoply-company"])})
+        User.find()
         .populate("_permission")
         .exec(function(err, users){
             if(!err){
@@ -259,7 +257,7 @@ module.exports = function(app, apiRoutes){
 
           var jwt = require('jsonwebtoken');
           var UserSchema = require('../models/user');
-         UserSchema.findOne({email : req.body.email}).populate("_company").exec(function(err, user){
+         UserSchema.findOne({email : req.body.email}).exec(function(err, user){
             if(!user){
                     res.status(401).json({err : 'Usuario o clave incorrectos'});
                     return;

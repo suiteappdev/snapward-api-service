@@ -74,11 +74,9 @@ var io = require("socket.io")(http);
 var turns = io;
 
 io.on('connection', function(socket){
-    socket.on("_company", function(_company){
-      socket.join(_company);
+      socket.join("SHOPLY_SNAPWARD_CHANNEL");
       console.log("connected to::", socket);
-      console.log("connected to ROOM::", _company);
-    });
+      console.log("connected to ROOM::", "SHOPLY_SNAPWARD_CHANNEL");
 });
 
 mongoose.connection.on('open', function(ref){

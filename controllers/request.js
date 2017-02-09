@@ -11,8 +11,7 @@ module.exports = function(app, apiRoutes, io){
       var REQ = req.params; 
 
        Model
-       .find({_company : mongoose.Types.ObjectId(req.headers["x-shoply-company"])})
-       .populate("_company")
+       .find()
        .populate("_user")
        .exec(function(err, rs){
            if(!err)
@@ -30,14 +29,12 @@ module.exports = function(app, apiRoutes, io){
 
        Model
        .find({
-          _company : mongoose.Types.ObjectId(req.headers["x-shoply-company"]), 
           _seller : REQ.seller,
           createdAt : {
             $gte: new Date(REQ.ini).toISOString(),
             $lt: new Date(REQ.end).toISOString()
           }
         })
-       .populate("_company")
        .populate("_user")
        .exec(function(err, rs){
            if(!err)
@@ -56,7 +53,6 @@ module.exports = function(app, apiRoutes, io){
        Model
        .findOne({_id : REQ.id})
        .populate("_user")
-       .populate("_company")
        .exec(function(err, rs){
            if(!err)
            {
@@ -72,18 +68,16 @@ module.exports = function(app, apiRoutes, io){
   		var REQ = req.body || req.params;
 
       !REQ.data || (data.data = REQ.data);
-      data._company = mongoose.Types.ObjectId(req.headers["x-shoply-company"]);
-            
-  	 var model = new Model(data);
-  		model.save(function(err, rs){
-  			if(rs){
-          console.log(err || rs)
-  				  res.json(rs);
-            io.to(rs._company).emit('request', rs);
-        }else{
-  				res.json(err);
-  			}
-  		});
+    	 var model = new Model(data);
+    		model.save(function(err, rs){
+    			if(rs){
+            console.log(err || rs)
+    				  res.json(rs);
+              io.to("SHOPLY_SNAPWARD_CHANNEL").emit('request', rs);
+          }else{
+    				res.json(err);
+    			}
+    		});
 
     }
 
@@ -106,7 +100,7 @@ module.exports = function(app, apiRoutes, io){
 
 
   function remove(req, res){
-        Model.remove({_id : mongoose.Types.ObjectId(req.params.id), _company : mongoose.Types.ObjectId(req.headers["x-shoply-company"])}, function(err, rs){
+        Model.remove({_id : mongoose.Types.ObjectId(req.params.id)}, function(err, rs){
               if(!err)
                   res.json(rs);
               else
@@ -119,9 +113,8 @@ module.exports = function(app, apiRoutes, io){
       var REQ = req.params; 
 
        Model
-       .find({_seller : mongoose.Types.ObjectId(REQ.user) , _company : mongoose.Types.ObjectId(req.headers["x-shoply-company"])})
+       .find()
        .populate("_user")
-       .populate("_company")
        .exec(function(err, rs){
            if(!err)
            {
@@ -133,7 +126,7 @@ module.exports = function(app, apiRoutes, io){
   }
 
   function atendido(req, res){
-      Model.update({ _id : mongoose.Types.ObjectId(req.params.id), _company : mongoose.Types.ObjectId(req.headers["x-shoply-company"])}, {"data.estado" : 'Atendido'}, function(err, rs){
+      Model.update({ _id : mongoose.Types.ObjectId(req.params.id)}, {"data.estado" : 'Atendido'}, function(err, rs){
         if(!err){
           res.status(200).json(rs);
         }
