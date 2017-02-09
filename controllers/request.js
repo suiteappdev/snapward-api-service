@@ -68,7 +68,7 @@ module.exports = function(app, apiRoutes, io){
   		var REQ = req.body || req.params;
       
       if(REQ._user){
-          REQ._user = mongoose.Types.ObjectId(REQ._user);
+          data._user = mongoose.Types.ObjectId(REQ._user);
       }
 
       !REQ.data || (data.data = REQ.data);
