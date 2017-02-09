@@ -66,12 +66,13 @@ module.exports = function(app, apiRoutes, io){
     function post(req, res){
   		var data = {};
   		var REQ = req.body || req.params;
+      
+      console.log("request", REQ)
 
       !REQ.data || (data.data = REQ.data);
     	 var model = new Model(data);
     		model.save(function(err, rs){
     			if(rs){
-            console.log(err || rs)
     				  res.json(rs);
               io.to("SHOPLY_SNAPWARD_CHANNEL").emit('request', rs);
           }else{
