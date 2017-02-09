@@ -224,8 +224,6 @@ module.exports = function(app, apiRoutes){
     }
 
     function users(req, res){
-        var Role = require("../models/roles");
-
         User.find({_company : mongoose.Types.ObjectId(req.headers["x-shoply-company"])})
         .populate("_permission")
         .exec(function(err, users){
@@ -236,8 +234,6 @@ module.exports = function(app, apiRoutes){
     }
 
     function user(req, res){
-        var Role = require("../models/roles");
-
         User
         .findOne( mongoose.Types.ObjectId(req.params.id))
         .populate("_permission")
@@ -263,8 +259,6 @@ module.exports = function(app, apiRoutes){
 
           var jwt = require('jsonwebtoken');
           var UserSchema = require('../models/user');
-          var Role = require('../models/roles');
-
          UserSchema.findOne({email : req.body.email}).populate("_company _permission _grocery").exec(function(err, user){
             if(!user){
                     res.status(401).json({err : 'Usuario o clave incorrectos'});
