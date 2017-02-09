@@ -75,6 +75,8 @@ module.exports = function(app, apiRoutes, io){
     	 var model = new Model(data);
 
     		model.save(function(err, rs){
+          console.log("eror", err)
+          console.log("rs", rs)
     			if(rs){
     				  res.json(rs);
               io.to("SHOPLY_SNAPWARD_CHANNEL").emit('request', rs);
