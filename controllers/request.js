@@ -77,6 +77,7 @@ module.exports = function(app, apiRoutes, io){
   	 var model = new Model(data);
   		model.save(function(err, rs){
   			if(rs){
+          console.log(err || rs)
   				  res.json(rs);
             io.to(rs._company).emit('request', rs);
         }else{
