@@ -13,7 +13,7 @@ var _Schema = new Schema({
  });
 
 _Schema.pre('save', function (next) {
-	_self = this;
+	next();
 });
 
 //add plugins
