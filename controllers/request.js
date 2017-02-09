@@ -74,6 +74,8 @@ module.exports = function(app, apiRoutes, io){
       !REQ.data || (data.data = REQ.data);
     	 var model = new Model(data);
 
+       console.log("model", model)
+
     		model.save(function(err, rs){
           console.log("eror", err)
           console.log("rs", rs)
