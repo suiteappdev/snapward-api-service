@@ -38,8 +38,7 @@ module.exports = function(app, apiRoutes, io){
           }
         })
        .populate("_company")
-       .populate("_client")
-       .populate("_seller")
+       .populate("_user")
        .exec(function(err, rs){
            if(!err)
            {
@@ -133,7 +132,7 @@ module.exports = function(app, apiRoutes, io){
   }
 
   function atendido(req, res){
-      Model.update({ _id : mongoose.Types.ObjectId(req.params.id), _company : mongoose.Types.ObjectId(req.headers["x-shoply-company"])}, {"data.estado" : 'Facturado'}, function(err, rs){
+      Model.update({ _id : mongoose.Types.ObjectId(req.params.id), _company : mongoose.Types.ObjectId(req.headers["x-shoply-company"])}, {"data.estado" : 'Atendido'}, function(err, rs){
         if(!err){
           res.status(200).json(rs);
         }

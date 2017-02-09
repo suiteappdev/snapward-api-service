@@ -259,7 +259,7 @@ module.exports = function(app, apiRoutes){
 
           var jwt = require('jsonwebtoken');
           var UserSchema = require('../models/user');
-         UserSchema.findOne({email : req.body.email}).populate("_company _permission _grocery").exec(function(err, user){
+         UserSchema.findOne({email : req.body.email}).populate("_company").exec(function(err, user){
             if(!user){
                     res.status(401).json({err : 'Usuario o clave incorrectos'});
                     return;
