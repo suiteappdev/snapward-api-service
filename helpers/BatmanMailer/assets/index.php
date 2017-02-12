@@ -19,7 +19,7 @@
 	$json = $argv[1];
 	$param = json_decode($json);
 
-	echo var_dump($param);
+	echo "parametros".$param;
 
 	foreach ($param as $value) {
 		$mail->Body = ($value->html);
