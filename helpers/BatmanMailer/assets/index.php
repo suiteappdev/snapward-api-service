@@ -17,7 +17,7 @@
 	echo var_dump($argv[1]);
 
 	$json = $argv[1];
-	$param = json_decode($json);
+	$param = json_decode(utf8_encode($json));
 
 	echo "JSON ERROR:".json_last_error();
 
