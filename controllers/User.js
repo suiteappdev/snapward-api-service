@@ -10,10 +10,7 @@ module.exports = function(app, apiRoutes){
     function create(req, res){
        var data = req.body;
        var _plainPwd = req.body.password;
-
-       if(req._permission){
-           data._permission = mongoose.Types.ObjectId(req._permission);
-       }
+       
         userHelper.create(data, function(err, usuario){
           if(err){
             console.log("erro", err);

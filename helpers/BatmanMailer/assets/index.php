@@ -14,10 +14,12 @@
 	$mail->Password = "gabi1989*"; 
 	$mail->isHTML(true);  
 
+	echo var_dump($argv[1]);
+
 	$json = $argv[1];
 	$param = json_decode($json);
 
-	var_dump($param);
+	echo var_dump($param);
 
 	foreach ($param as $value) {
 		$mail->Body = ($value->html);
