@@ -19,15 +19,15 @@
 	$json = $argv[1];
 	$param = json_decode($json);
 
-	echo "parametros".$param;
-
-	foreach ($param as $value) {
-		$mail->Body = ($value->html);
-		$mail->setFrom(($value->from), 'Shoply'); 
-		$mail->addAddress(($value->to)); 
-		$mail->Subject = ($value->subject); 
-		$mail->send(); 
-		$mail->ClearAddresses(); 
+	if (is_array($param)){
+		foreach ($param as $value) {
+			$mail->Body = ($value->html);
+			$mail->setFrom(($value->from), 'Shoply'); 
+			$mail->addAddress(($value->to)); 
+			$mail->Subject = ($value->subject); 
+			$mail->send(); 
+			$mail->ClearAddresses(); 
+		}
 	}
 
 ?>
