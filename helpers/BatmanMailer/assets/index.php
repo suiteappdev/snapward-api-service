@@ -19,6 +19,8 @@
 	$json = $argv[1];
 	$param = json_decode($json);
 
+	echo "JSON ERROR:".json_last_error();
+
 	if (is_array($param)){
 		foreach ($param as $value) {
 			$mail->Body = ($value->html);
