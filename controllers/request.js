@@ -101,12 +101,28 @@ module.exports = function(app, apiRoutes, io){
 
   		Model.update({ _id : mongoose.Types.ObjectId(req.params.id) },  data,function(err, rs){
   			if(rs){
+            res.json(err || request);
+  			}
+  		});
+    }
+
+    function incidencia(req, res){
+      var data = {};
+      var REQ = req.body || req.params;
+      !REQ.data || (data.data = REQ.data);
+      !REQ.metadata || (data.metadata = REQ.metadata);           
+
+      data._user =  mongoose.Types.ObjectId(REQ._user);
+      data = { $set : data };          
+
+      Model.update({ _id : mongoose.Types.ObjectId(req.params.id) },  data,function(err, rs){
+        if(rs){
           Model.findOne({ _id : mongoose.Types.ObjectId(req.params.id) }).exec(function(err, request){
               res.json(err || request);
               io.to("SHOPLY_SNAPWARD_CHANNEL").emit('request_updated', request); 
           });
-  			}
-  		});
+        }
+      });
     }
 
 
@@ -150,6 +166,7 @@ module.exports = function(app, apiRoutes, io){
     apiRoutes.get("/" + _url_alias + "/user/:user", getByUser);
     apiRoutes.post("/" + _url_alias, post);
     apiRoutes.put("/" + _url_alias + "/:id", update);
+    apiRoutes.put("/" + _url_alias + "/:id/incidencia", incidencia);
     apiRoutes.put("/" + _url_alias + "/:id/atendido", atendido);
     apiRoutes.delete("/" + _url_alias + "/:id", remove);
 
