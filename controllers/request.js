@@ -101,7 +101,10 @@ module.exports = function(app, apiRoutes, io){
 
   		Model.update({ _id : mongoose.Types.ObjectId(req.params.id) },  data,function(err, rs){
   			if(rs){
-  				res.json(err || rs);
+          Model.find({ _id : mongoose.Types.ObjectId(req.params.id) }).exec(function(err, request){
+              res.json(err || request);
+              io.to("SHOPLY_SNAPWARD_CHANNEL").emit('request_updated', request); 
+          });
   			}
   		});
     }
